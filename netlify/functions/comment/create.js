@@ -7,6 +7,7 @@ const cards = require('../cards.json');
 /* configure faunaDB Client with our secret */
 const client = new Client({
   secret: process.env.FAUNADB_SERVER_SECRET,
+  domain: process.env.FAUNADB_SERVER_DOMAIN
 })
 
 /* export our lambda function as named "handler" export */
@@ -25,7 +26,7 @@ const handler = async (event) => {
     if(data.password.length < 4 || data.password.length > 32)
       throw "error";
 
-    const response = await client.query(query.Create(query.Collection('comments'), data))
+    const response = await client.query(query.Create(query.Collection('comments'), {data}))
     console.log('success', response)
     /* Success! return the response with statusCode 200 */
     return {
